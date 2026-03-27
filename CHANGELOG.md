@@ -42,3 +42,4 @@ All notable changes to this repository will be documented in this file.
 
 - clearer top-level onboarding and repository structure
 - clearer distinction between plugin UX and shared MCP infrastructure
+- added architecture documentation for the split between `plugins/` and `mcp/`

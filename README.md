@@ -141,6 +141,11 @@ Both tests create temporary artifacts and clean them up afterward.
 - recurring reminders
 - flag and unflag
 
+## Docs
+
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Changelog](./CHANGELOG.md)
+
 ## Notes
 
 - This repo is for macOS.
