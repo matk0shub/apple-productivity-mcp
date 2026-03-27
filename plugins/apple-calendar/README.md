@@ -82,14 +82,14 @@ Export one day to `.ics`:
 1. Open this repository in Codex.
 2. Install or expose the local plugin so Codex can see [plugin.json](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-calendar/.codex-plugin/plugin.json).
 3. Ensure macOS Calendar access is enabled for the app running Codex.
-4. The plugin now also points at the shared local MCP server via [plugins/apple-calendar/.mcp.json](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-calendar/.mcp.json).
+4. The plugin now also points at the shared local MCP server via `.mcp.json`.
 5. Start using either:
    - the skill prompts from `skills/apple-calendar/SKILL.md`
    - or the MCP tools exposed by the shared `apple-productivity` server
 
 ## MCP Note
 
-This plugin now consumes the shared local MCP server from [apple-productivity-mcp](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-productivity-mcp). That means:
+This plugin now consumes the shared local MCP server from `mcp/apple-productivity`. That means:
 
 - you can use the Apple Calendar skill directly in Codex
 - and the same backend is also available as MCP tools without duplicating business logic

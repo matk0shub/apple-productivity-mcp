@@ -27,18 +27,6 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
-    },
-    {
-      "name": "apple-productivity-mcp",
-      "source": {
-        "source": "local",
-        "path": "./plugins/apple-productivity-mcp"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
     }
   ]
 }

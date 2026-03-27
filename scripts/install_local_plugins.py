@@ -9,7 +9,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SERVER_PATH = ROOT / "plugins" / "apple-productivity-mcp" / "scripts" / "apple_productivity_mcp.py"
+SERVER_PATH = ROOT / "mcp" / "apple-productivity" / "server" / "apple_productivity_mcp.py"
+MCP_TEMPLATE_PATH = ROOT / "mcp" / "apple-productivity" / "mcp.template.json"
+MCP_LOCAL_PATH = ROOT / "mcp" / "apple-productivity" / "mcp.local.json"
 
 
 def rewrite_mcp_json(path: Path) -> None:
@@ -41,14 +43,25 @@ def main() -> None:
     mcp_files = [
         ROOT / "plugins" / "apple-calendar" / ".mcp.json",
         ROOT / "plugins" / "apple-reminders" / ".mcp.json",
-        ROOT / "plugins" / "apple-productivity-mcp" / ".mcp.json",
     ]
     for path in mcp_files:
         rewrite_mcp_json(path)
 
+    template_payload = json.loads(MCP_TEMPLATE_PATH.read_text())
+    for server in template_payload.get("mcpServers", {}).values():
+        rewritten = []
+        for arg in server.get("args", []):
+            if isinstance(arg, str) and "apple_productivity_mcp.py" in arg:
+                rewritten.append(str(SERVER_PATH))
+            else:
+                rewritten.append(arg)
+        server["args"] = rewritten
+    MCP_LOCAL_PATH.write_text(json.dumps(template_payload, indent=2) + "\n")
+
     print("Updated MCP config files:")
     for path in mcp_files:
         print(f"- {path}")
+    print(f"- {MCP_LOCAL_PATH}")
     print("\nNext steps:")
     print("1. Ensure Calendar and Reminders permissions are enabled for the app running Codex.")
     print("2. Open this repo in Codex.")

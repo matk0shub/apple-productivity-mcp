@@ -82,11 +82,11 @@ Move and complete:
 1. Open this repository in Codex.
 2. Install or expose the local plugin so Codex can see [plugin.json](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-reminders/.codex-plugin/plugin.json).
 3. Ensure macOS Reminders access is enabled for the app running Codex.
-4. The plugin now also points at the shared local MCP server via [plugins/apple-reminders/.mcp.json](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-reminders/.mcp.json).
+4. The plugin now also points at the shared local MCP server via `.mcp.json`.
 5. Start using either:
    - the skill prompts from `skills/apple-reminders/SKILL.md`
    - or the MCP tools exposed by the shared `apple-productivity` server
 
 ## MCP Note
 
-This plugin now consumes the shared local MCP server from [apple-productivity-mcp](/Users/matty/Documents/ai_projects/pinescript/plugins/apple-productivity-mcp). That keeps the CLI, plugin skill, and MCP tools on top of one shared backend.
+This plugin now consumes the shared local MCP server from `mcp/apple-productivity`. That keeps the CLI, plugin skill, and MCP tools on top of one shared backend.

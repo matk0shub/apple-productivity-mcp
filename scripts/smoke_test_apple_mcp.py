@@ -10,7 +10,7 @@ import time
 from pathlib import Path
 
 
-SERVER = Path("/Users/matty/Documents/ai_projects/pinescript/plugins/apple-productivity-mcp/scripts/apple_productivity_mcp.py")
+SERVER = Path("/Users/matty/Documents/ai_projects/codex-apple-productivity/mcp/apple-productivity/server/apple_productivity_mcp.py")
 
 
 def request(proc: subprocess.Popen, message: dict) -> dict:
@@ -56,7 +56,7 @@ def main() -> None:
                 },
             },
         )
-        assert init["result"]["serverInfo"]["name"] == "apple-productivity-mcp"
+        assert init["result"]["serverInfo"]["name"] == "apple-productivity"
         proc.stdin.write(json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized", "params": {}}) + "\n")
         proc.stdin.flush()
 

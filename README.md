@@ -1,44 +1,95 @@
 # Codex Apple Productivity
 
-Polished local Apple productivity tooling for Codex on macOS.
+> Local Apple Calendar + Reminders tooling for Codex on macOS, with a shared MCP layer underneath.
 
-This repository contains:
+![macOS](https://img.shields.io/badge/macOS-required-111111)
+![EventKit](https://img.shields.io/badge/backend-EventKit-0A84FF)
+![MCP](https://img.shields.io/badge/protocol-MCP-4B7BEC)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+## What This Repo Gives You
+
+- native Apple Calendar automation
+- native Apple Reminders automation
+- installable Codex plugins for both
+- one shared local MCP server
+- recurring events and recurring reminders
+- `.ics` export and import
+- smoke tests for both CLI and MCP flows
+
+## Architecture
+
+```mermaid
+flowchart TD
+    A["Codex User"] --> B["apple-calendar plugin"]
+    A --> C["apple-reminders plugin"]
+    B --> D["Shared MCP layer"]
+    C --> D
+    D --> E["Calendar EventKit backend"]
+    D --> F["Reminders EventKit backend"]
+    F --> G["AppleScript flag/unflag fallback"]
+```
+
+## Repo Layout
+
+```text
+codex-apple-productivity/
+  plugins/
+    apple-calendar/          # user-facing Codex plugin
+    apple-reminders/         # user-facing Codex plugin
+  mcp/
+    apple-productivity/      # shared MCP server layer
+      server/
+  scripts/
+    install_local_plugins.py
+    smoke_test_apple_cli.py
+    smoke_test_apple_mcp.py
+  .agents/plugins/marketplace.json
+  CHANGELOG.md
+  LICENSE
+  README.md
+```
+
+## What Is A Plugin vs What Is MCP?
+
+### `plugins/`
+
+These are the things you install and use directly in Codex.
 
 - `apple-calendar`
 - `apple-reminders`
-- `apple-productivity-mcp`
 
-Together they give you:
+They contain:
 
-- native Apple Calendar automation through EventKit
-- native Apple Reminders automation through EventKit
-- a shared local MCP server for both domains
-- Codex plugin manifests, skills, smoke tests, and installation helpers
+- plugin manifest
+- skill docs
+- CLI wrappers
+- config
+- `.mcp.json` wiring to the shared MCP server
 
-## Included
+### `mcp/`
 
-| Component | Purpose |
+This is infrastructure, not the user-facing plugin layer.
+
+`mcp/apple-productivity/` contains the shared local stdio MCP server used by both plugins.
+
+That separation keeps the repo cleaner:
+
+- plugin UX stays in `plugins/`
+- shared transport/integration logic stays in `mcp/`
+
+## Choose Your Usage Mode
+
+| Mode | Best for |
 | --- | --- |
-| `plugins/apple-calendar` | Calendar plugin, skill, CLI wrapper, EventKit backend |
-| `plugins/apple-reminders` | Reminders plugin, skill, CLI wrapper, EventKit backend |
-| `plugins/apple-productivity-mcp` | Shared local stdio MCP server for both |
-| `scripts/smoke_test_apple_cli.py` | End-to-end smoke test for both CLI tools |
-| `scripts/smoke_test_apple_mcp.py` | End-to-end smoke test for the MCP server |
-| `scripts/install_local_plugins.py` | Local install helper that rewrites `.mcp.json` paths for your clone |
-
-## Why This Repo Exists
-
-Codex plugins are excellent for local macOS automation, but once you want one shared backend for Calendar and Reminders, a local MCP server becomes the cleaner architecture.
-
-This repo gives you both:
-
-- human-friendly Codex plugins and skills
-- one reusable MCP layer underneath
+| Codex plugin skill | Natural chat-like usage in Codex |
+| CLI wrapper | Scriptable local automation |
+| MCP tools | Reusable integration layer for Codex and future clients |
 
 ## Quick Start
 
 1. Clone the repo anywhere on your Mac.
-2. Run the installer:
+2. Run:
 
 ```bash
 /usr/bin/python3 scripts/install_local_plugins.py --repo-root "$(pwd)"
@@ -48,52 +99,66 @@ This repo gives you both:
    - Calendar
    - Reminders
 
-   for the app that runs Codex.
-
 4. Open the repo in Codex.
-5. Use either:
-   - the `apple-calendar` and `apple-reminders` plugin skills
-   - or the `apple-productivity` MCP tools
+5. Use:
+   - `plugins/apple-calendar`
+   - `plugins/apple-reminders`
 
-## Install Notes
-
-The installer does two useful things:
-
-- rewrites all `.mcp.json` files to the real absolute path of your clone
-- writes a ready-to-use local marketplace file under `.agents/plugins/marketplace.json`
-
-It does not force-copy anything into your global Codex directories. That keeps install reversible and transparent.
+The shared MCP layer will be wired automatically.
 
 ## Smoke Tests
 
-CLI smoke test:
+CLI:
 
 ```bash
 /usr/bin/python3 scripts/smoke_test_apple_cli.py
 ```
 
-MCP smoke test:
+MCP:
 
 ```bash
 /usr/bin/python3 scripts/smoke_test_apple_mcp.py
 ```
 
-Both tests create temporary items and clean them up afterward.
+Both tests create temporary artifacts and clean them up afterward.
 
-## Repository Design
+## Highlights
 
-The repo is intentionally split:
+### Apple Calendar
 
-- plugin UX stays in each plugin folder
-- shared backend integration goes through `apple-productivity-mcp`
-- Calendar and Reminders keep their own configs and skills
+- agenda and free-window lookup
+- search by title + day
+- create, update, delete
+- reminder management
+- recurring events
+- `.ics` export and import
 
-That gives you a clean local UX today and a future path to a ChatGPT custom app later if needed.
+### Apple Reminders
 
-## License
+- due, overdue, and alarm-today views
+- add, update, done, reopen, delete
+- move between lists
+- recurring reminders
+- flag and unflag
 
-MIT. See [LICENSE](./LICENSE).
+## Notes
 
-## Changelog
+- This repo is for macOS.
+- Calendar and Reminders require system permission for the app running Codex.
+- The shared MCP layer is the right foundation if you later want a ChatGPT app or another MCP client.
 
-See [CHANGELOG.md](./CHANGELOG.md).
+## Release Hygiene
+
+- [CHANGELOG.md](./CHANGELOG.md)
+- [LICENSE](./LICENSE)
+
+## Components
+
+| Path | Purpose |
+| --- | --- |
+| `plugins/apple-calendar` | Calendar plugin layer |
+| `plugins/apple-reminders` | Reminders plugin layer |
+| `mcp/apple-productivity` | shared MCP server layer |
+| `scripts/install_local_plugins.py` | local path rewrite/install helper |
+| `scripts/smoke_test_apple_cli.py` | CLI smoke test |
+| `scripts/smoke_test_apple_mcp.py` | MCP smoke test |

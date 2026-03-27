@@ -808,7 +808,7 @@ def handle_request(message: dict[str, Any]) -> dict[str, Any] | None:
             "result": {
                 "protocolVersion": PROTOCOL_VERSION,
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "apple-productivity-mcp", "version": "0.1.0"},
+                "serverInfo": {"name": "apple-productivity", "version": "0.1.0"},
             },
         }
 
